@@ -49,8 +49,13 @@ The last comment block of each slide will be treated as slide notes. It will be 
 transition: fade-out
 ---
 
-```mermaid
+### Under the hood - Protocol flow
+
+<br>
+
+```mermaid {scale: 0.8, look: 'handDrawn', class: 'flex items-center justify-center'}
 sequenceDiagram
+  autonumber
     participant Browser
     participant Inertia
     participant Controller
@@ -60,11 +65,12 @@ sequenceDiagram
     Controller-->>Browser: HTML + data-page
 
     %% Client-side Setup
-    Note over Browser,Inertia: Inertia boots up<br/>React/Vue/Svelte mounts
+    Note over Browser,Inertia: Inertia boots up<br/>frontend SPA mounts
 
     %% Subsequent Navigation
     Browser->>Inertia: Click <Link to="/startups/1">
-    Inertia->>Controller: GET /startups/1<br/>(X-Inertia: true)
+    Inertia->>Controller: GET /startups/1
+    Note over Inertia,Controller: X-Inertia: true
     Controller-->>Inertia: JSON response
     Inertia->>Browser: Swap component<br/>Update history
 ```

@@ -117,7 +117,7 @@ Content-Type: application/json
 
 ## Slide 5: Under the hood - Protocol flow
 ```mermaid
-sequenceDiagram
+  sequenceDiagram
     participant Browser
     participant Inertia
     participant Controller
@@ -131,7 +131,8 @@ sequenceDiagram
 
     %% Subsequent Navigation
     Browser->>Inertia: Click <Link to="/startups/1">
-    Inertia->>Controller: GET /startups/1<br/>(X-Inertia: true)
+    Inertia->>Controller: GET /startups/1
+    Note over Inertia,Controller: X-Inertia: true
     Controller-->>Inertia: JSON response
     Inertia->>Browser: Swap component<br/>Update history
 ```
