@@ -1,11 +1,13 @@
 ---
 # You can also start simply with 'default'
 theme: "default"
+fonts:
+  sans: "Epilogue"
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: "assets/main-cover.webp"
 # some information about your slides (markdown enabled)
-title: nantes.rb | inertia x rails 101
+title: nantes.rb | inertia x rails = 🔥
 info: |
   ## Basics of inertia.js used in a rails app
 # apply unocss classes to the current slide
@@ -19,18 +21,22 @@ transition: slide-left
 mdc: true
 ---
 
-# inertia x rails 101
+# inertia x rails = 🔥
 
 <div class="white">
-  <a href="https://www.meetup.com/nantes-rb/events/305995476">nantes.rb</a> | 27/02/2025
+  How to build modern monolithic SPAs 🤯
 </div>
 
-<div @click="$slidev.nav.next" class="mt-12 py-1 px-2 gap-1 rounded-md inline-flex items-center hover:bg-orange-500 hover:text-black hover:cursor-pointer">
-  Let's start <carbon:fire class="text-sm"/>
+<div @click="$slidev.nav.next" class="mt-12 text-sm py-2 px-2 gap-1 rounded-md inline-flex items-center hover:bg-orange-500 hover:text-black hover:cursor-pointer">
+  Let's start our exploration <carbon:arrow-right class="size-4"/>
 </div>
 
-<div class="abs-br m-6 text-xl">
-  <a href="https://www.stellaire.studio" target="_blank">
+<div class="abs-br m-6 inline-flex items-center gap-4">
+  <div class="white">
+    <a href="https://www.meetup.com/nantes-rb/events/305995476">nantes.rb</a> | 27/02/2025
+  </div>
+
+  <a href="https://www.stellaire.studio" target="_blank" class="border-b-0!">
     <img src="./assets/stellaire-logo.png" class="size-8">
   </a>
 </div>
@@ -38,6 +44,30 @@ mdc: true
 <!--
 The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
 -->
+
+---
+transition: fade-out
+---
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant Inertia
+    participant Controller
+
+    %% Initial Visit
+    Browser->>Controller: GET /startups
+    Controller-->>Browser: HTML + data-page
+
+    %% Client-side Setup
+    Note over Browser,Inertia: Inertia boots up<br/>React/Vue/Svelte mounts
+
+    %% Subsequent Navigation
+    Browser->>Inertia: Click <Link to="/startups/1">
+    Inertia->>Controller: GET /startups/1<br/>(X-Inertia: true)
+    Controller-->>Inertia: JSON response
+    Inertia->>Browser: Swap component<br/>Update history
+```
 
 ---
 transition: fade-out
