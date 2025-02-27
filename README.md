@@ -1,11 +1,9 @@
-# Welcome to [Slidev](https://github.com/slidevjs/slidev)!
+# rails x inertia.js = 🔥
 
-To start the slide show:
+A talk about how to build a Rails app with Inertia.js.
 
-- `pnpm install`
-- `pnpm dev`
-- visit <http://localhost:3030>
+Download the slides:
+- [PDF](./slides.pdf)
+- [Markdown](./slides.md)
 
-Edit the [slides.md](./slides.md) to see the changes.
-
-Learn more about Slidev at the [documentation](https://sli.dev/).
+Built with [Slidev](https://sli.dev/).
