@@ -33,7 +33,7 @@ mdc: true
 
 <div class="abs-br m-6 inline-flex items-center gap-4">
   <div class="white">
-    <a href="https://www.meetup.com/nantes-rb/events/305995476">nantes.rb</a> | 27/02/2025
+    <a href="https://www.meetup.com/nantes-rb/events/305995476" class="text-orange-500 hover:text-orange-600!">nantes.rb</a> | 27/02/2025
   </div>
 
   <a href="https://www.stellaire.studio" target="_blank" class="border-b-0!">
@@ -41,9 +41,197 @@ mdc: true
   </a>
 </div>
 
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
+---
+transition: fade-out
+---
+
+# Why is inertia.js great?
+<div>
+  <span v-click>It allows you to build </span>
+  <span v-click class="font-bold">fully client-side rendered SPA,</span><span v-click class="text-orange-500 font-bold"> without the complexity.</span>
+</div>
+
+<div v-click class="mt-2">
+  By leveraging existing server-side patterns that you already know & love.
+</div>
+
+<v-clicks class="mt-8">
+
+  - No need to build REST/GraphQL APIs
+  - No client-side routing required
+  - No client-side state management headaches
+  - No separate authentication/authorization system
+  - No new deployment strategy
+  - Write react/vue/svelte components while sticking to rails conventions
+
+</v-clicks>
+
+<div v-click class="mt-8">
+  Think of inertia.js as the glue between your Rails backend and the JS frontend of your choice (react, vue, svelte..).
+</div>
+
+<div v-click class="mt-8">
+  Allowing you to leverage the <span class="font-bold text-orange-500">JS native ecosystem</span> rails is <span class="font-bold text-orange-500">still missing out on</span>.
+</div>
+
+---
+transition: fade-out
+---
+
+# What is inertia.js?
+
+<div v-click class="mb-4">
+  A new approach to building classic server-driven web apps
+</div>
+
+<v-clicks depth="2" every="1">
+
+1. You build your app using Rails' existing patterns
+  - Routes, controllers, middleware, auth, etc.
+  - Everything stays the same except the view layer
+
+</v-clicks>
+
+<span class="mt-4"></span>
+
+<v-clicks depth="2" every="1">
+
+2. Instead of ERB templates, your views are JS components
+  - React, Vue, or Svelte components
+  - Full power of modern frontend frameworks
+
+</v-clicks>
+
+<span class="mt-4"></span>
+
+<v-clicks depth="2" every="1">
+
+3. The magic: client-side regular routing
+  - Click an inertia powered `<Link>` or submit a form with inertia `<Router>` → intercepted, made via XHR
+  - Server returns JSON (component name + props) instead of HTML
+  - inertia swaps the page component & updates browser history
+
+</v-clicks>
+
+<span class="mt-4"></span>
+
+<span v-click class="absolute rotate--8 top-48 right-8 bg-orange-500 text-white px-4 py-2 rounded-md">
+  Smooth SPA experience 🎉
+</span>
+
+---
+transition: fade-out
+---
+
+# Under the hood - First Visit
+<div v-click class="mb-4">
+  Regular <span class="font-bold text-orange-500">request</span> / response cycle rendering HTML
+</div>
+
+```http {hide|1|all}{lines:true, maxHeight: '20%'}
+REQUEST
+GET: http://showcase.stellaire.studio/startups
+Accept: text/html, application/xhtml+xml
+```
+
+---
+transition: fade-out
+---
+
+# Under the hood - First Visit
+<div v-click class="mb-4">
+  Regular request / <span class="font-bold text-orange-500">response</span> cycle rendering HTML
+</div>
+
+```http {hide|1|all}{lines:true, maxHeight: '20%'}
+RESPONSE
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+```
+
+```html {hide|2-6|8-31}{lines:true, wrap:true, maxHeight: '70%'}
+<html>
+  <head>
+      <title>Startups showcase</title>
+      <link href="/css/app.css" rel="stylesheet">
+      <script src="/js/app.js" defer></script>
+  </head>
+  <body>
+      <div id="app" data-page='{
+        "component": "Startups/Index",
+        "props": {
+          "featured_startups": [
+            {
+              "id": 1,
+              "name": "Astreinte Vitale",
+              "description": "Because each second counts.",
+              "preview_image_url": "/images/startups/1.jpg"
+            },
+            {
+              "id": 2,
+              "name": "kwali",
+              "description": "The best after sale service you will ever give.",
+              "preview_image_url": "/images/startups/2.jpg"
+            }
+          ],
+          "filters": {
+            "sort": "newest"
+          }
+        },
+        "url": "/startups",
+        "version": "c32b8e4965f418ad16eaebba1d4e960f"
+      }'></div>
+  </body>
+</html>
+```
+
+<div class="mt-4 absolute top-20 right-14" v-click="'7'">
+  <a href="https://inertia-rails.dev/guide/the-protocol#html-responses" class="text-orange-500 hover:text-orange-600!" target="_blank">Documentation</a>
+</div>
+
+---
+transition: fade-out
+---
+
+# Under the hood - Subsequent Visits
+
+<div v-click class="mb-4">
+  inertia intercepts the request and returns a <span class="font-bold text-orange-500">JSON</span> response
+</div>
+
+```http {hide|1|all}{lines:true, maxHeight: '20%'}
+REQUEST
+GET: /startups/1
+X-Inertia: true
+X-Inertia-Version: c32b8e...
+```
+
+```http {hide|1|all}{lines:true, maxHeight: '20%'}
+RESPONSE
+HTTP/1.1 200 OK
+Content-Type: application/json
+```
+
+```json {hide|all}{lines:true, maxHeight: '50%'}
+{
+  "component": "Startup",
+  "props": {
+    "startup": {
+      "id": 1,
+      "name": "Astreinte Vitale",
+      "description": "Because each second counts.",
+      "preview_image_url": "/images/startups/1.jpg",
+      "team_members": [...]
+    }
+  },
+  "url": "/startups/1",
+  "version": "c32b8e..."
+}
+```
+
+<div class="mt-4 absolute top-20 right-14" v-click="'7'">
+  <a href="https://inertia-rails.dev/guide/the-protocol#inertia-responses" class="text-orange-500 hover:text-orange-600!" target="_blank">Documentation</a>
+</div>
 
 ---
 transition: fade-out
@@ -79,590 +267,411 @@ sequenceDiagram
 transition: fade-out
 ---
 
-# What is Slidev?
+# Setting up inertia in rails
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+<v-clicks>
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - themes can be shared and re-used as npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embed Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
-<br>
-<br>
+### 1. Server-side setup
 
-Read more about [Why Slidev?](https://sli.dev/guide/why)
-
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/features/slide-scope-style
--->
-
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
-
-<!--
-Here is another comment.
--->
-
----
-transition: slide-up
-level: 2
----
-
-# Navigation
-
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
-
-## Keyboard Shortcuts
-
-|                                                     |                             |
-| --------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                       | previous slide              |
-| <kbd>down</kbd>                                     | next slide                  |
-
-<!-- https://sli.dev/guide/animations.html#click-animation -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
----
-layout: two-cols
-layoutClass: gap-16
----
-
-# Table of contents
-
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1" />
+```ruby
+# Gemfile
+gem 'inertia_rails'
+gem 'vite_rails'
 ```
 
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
-
-::right::
-
-<Toc text-sm minDepth="1" maxDepth="2" />
-
----
-layout: image-right
-image: https://cover.sli.dev
----
-
-# Code
-
-Use code snippets and get the highlighting directly, and even types hover!
-
-```ts {all|5|7|7-8|10|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
-
-import { computed, ref } from 'vue'
-
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
+```bash
+bin/rails generate inertia:install
 ```
 
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
+This will:
+- Set up vite.js for asset bundling
+- Configure TypeScript (optional)
+- Install Tailwind CSS (optional)
+- Setup the rails app to work with inertia
+- Set up example route, controller & view component
 
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-
-[Learn more](https://sli.dev/features/line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
+</v-clicks>
 
 ---
-level: 2
+transition: fade-out
 ---
 
-# Shiki Magic Move
+# Setting up inertia in rails
 
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
+<v-clicks>
 
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
+### 2. Client-side setup
+```bash
+# Install Inertia's React adapter
+yarn add @inertiajs/react react react-dom
+```
 
-````md magic-move {lines: true}
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
+### 3. Initialize the inertia app
+```js {hide|all|6-9|10-12|all}{lines:true, maxHeight: '100%'}
+// app/frontend/entrypoints/application.js
+import { createInertiaApp } from '@inertiajs/react'
+import { createRoot } from 'react-dom/client'
+
+createInertiaApp({
+  resolve: (name) => {
+    const pages = import.meta.glob('../pages/**/*.jsx', { eager: true })
+    return pages[`../pages/${name}.jsx`]
+  },
+  setup({ el, App, props }) {
+    createRoot(el).render(<App {...props} />)
+  },
 })
 ```
 
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
-        ]
-      }
+</v-clicks>
+
+---
+transition: fade-out
+---
+
+# Layout & controllers
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+```erb {hide|all}{lines:true, maxHeight: '100%'}
+<%# app/views/layouts/application.html.erb %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Startups showcase</title>
+    <%# If you want to use React add
+        `vite_react_refresh_tag` %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>
+```
+
+</div>
+<div>
+
+```ruby {hide|all|2-13|3-5|7-12|15-26|16-18|20-25|all}{lines:true, maxHeight: '90%'}
+class StartupsController < ApplicationController
+  def index
+    startups = Startup.
+      featured.
+      with_attached_preview_image
+
+    render inertia: 'Startups/Index', props: {
+      featured_startups: startups.as_json(
+        include: [:id, :name, :description],
+        methods: [:preview_image_url]
+      )
     }
+  end
+
+  def show
+    startup = Startup.
+      with_attached_preview_image.
+      find(params[:id])
+
+    render inertia: 'Startups/Show', props: {
+      startup: startup.as_json(
+        include: [:team_members],
+        methods: [:preview_image_url]
+      )
+    }
+  end
+end
+```
+
+</div>
+</div>
+
+---
+transition: fade-out
+---
+
+# Frontend components
+
+<div v-click class="text-sm">
+  w/ react
+</div>
+
+```jsx {hide|all|1|2|4|7|8-29|12,27|13-17,26|18-25|all}{lines:true, maxHeight: '90%'}
+// app/frontend/Pages/Startups/Index.jsx
+import { Head, Link } from '@inertiajs/react'
+
+export default function Index({ featured_startups }) {
+  return (
+    <>
+      <Head title="Our startups" />
+      <div>
+        <h1>Our startups</h1>
+
+        <div className="grid ...">
+          {featured_startups.map(startup => (
+            <Link
+              key={startup.id}
+              href={`/startups/${startup.id}`}
+            >
+              <div>
+                <img
+                  src={startup.preview_image_url}
+                  alt={startup.title}
+
+                />
+              </div>
+              <h2>{startup.title}</h2>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
+```
+
+---
+transition: fade-out
+---
+
+# Batteries included
+
+
+<div v-click class="font-bold mb-4">
+  Smart <span class="text-orange-500">asset versioning</span>
+</div>
+
+<v-clicks>
+
+```http
+REQUEST:
+GET: /startups/1
+X-Inertia: true
+X-Inertia-Version: [old-version]
+
+RESPONSE:
+409 Conflict
+X-Inertia-Location: /startups/1
+```
+
+<a href="https://inertia-rails.dev/guide/the-protocol#asset-versioning" class="text-orange-500 hover:text-orange-600!" target="_blank">Documentation</a>
+
+</v-clicks>
+
+---
+transition: fade-out
+---
+
+# Batteries included
+
+<div v-click class="font-bold mb-4">
+  Performance: <span class="text-orange-500">partial reloads</span>
+</div>
+
+<v-clicks>
+```http
+REQUEST
+GET: /startups
+X-Inertia: true
+X-Inertia-Partial-Data: startups
+X-Inertia-Partial-Component: Startups
+```
+
+```http
+RESPONSE
+Content-Type: application/json
+```
+
+```json
+{
+  "component": "Startups",
+  "props": {
+    "filters": [ ... ],  // NOT included
+    "startups": [ ... ]  // included
   }
 }
 ```
 
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
-    }
-  })
-}
-```
+<a href="https://inertia-rails.dev/guide/the-protocol#partial-reloads" class="text-orange-500 hover:text-orange-600!" target="_blank">Documentation</a>
 
-Non-code blocks are ignored.
-
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-}
-</script>
-```
-````
+</v-clicks>
 
 ---
+transition: fade-out
+---
 
-# Components
+# Batteries included
 
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
+<div v-click class="font-bold mb-4">
+  More <span class="text-orange-500">goodies</span>
 </div>
 
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
+<v-clicks>
 
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
+- Shared data across components
+- Deferred props loading
+- Link prefetching
+- Classic rails html.erb views still work (perfect for devise out of the box setup)
+
+</v-clicks>
 
 ---
-class: px-20
+transition: fade-out
 ---
 
-# Themes
+# Additionnal batteries
 
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
+<div v-click class="font-bold mb-4">
+  Remember this <span class="text-orange-500">ugly thing..?</span>
 </div>
 
-Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
-check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
+```jsx {hide|all|1|7}{lines:true, maxHeight: '90%'}
+// app/frontend/Pages/Startups/Index.jsx
+// ...
+<div className="grid ...">
+  {featured_startups.map(startup => (
+    <Link
+      key={startup.id}
+      href={`/startups/${startup.id}`}
+    >
+      <div>
+        <img
+          src={startup.preview_image_url}
+          alt={startup.title}
+
+        />
+      </div>
+      <h2>{startup.title}</h2>
+    </Link>
+  ))}
+</div>
+// ...
+```
+
+<span v-click class="text-4xl absolute top-60 left-100">
+  🙊
+</span>
 
 ---
+transition: fade-out
+---
 
-# Clicks Animations
+# Additionnal batteries
 
-You can add `v-click` to elements to add a click animation.
+<div v-click class="inline-block font-bold mb-4 me-2">
+  There's a neat solution for this:
+</div>
+<a v-click href="https://js-from-routes.netlify.app/" target="_blank" class="text-orange-500 hover:text-orange-600!">JS from routes</a>
+
+```jsx {hide|all|2|7-10|9}{lines:true, maxHeight: '90%'}
+// app/frontend/Pages/Startups/Index.jsx
+import { startups } from "@/path_helpers";
+
+// ...
+<div className="grid ...">
+  {featured_startups.map(startup => (
+    <Link
+      key={startup.id}
+      href={startups.show.path(startup)}
+    >
+      <div>
+        <img
+          src={startup.preview_image_url}
+          alt={startup.title}
+
+        />
+      </div>
+      <h2>{startup.title}</h2>
+    </Link>
+  ))}
+</div>
+// ...
+```
+
+<span v-click class="text-base absolute top-73 left-102">
+  We're home now 🤗
+</span>
+
+---
+transition: fade-out
+---
+
+# Start living <span class="text-orange-500 font-bold">your best frontend life</span>
+
+<div v-click class="font-bold mb-4">
+  Now you can focus on building great UIs:
+</div>
+
+<v-clicks>
+
+- Leverage <a href="https://ui.shadcn.com/docs" target="_blank" class="text-orange-500 hover:text-orange-600!">shadcn/ui</a> slick & modern components
+- Setup complex frontend interactions (slidesheet, drawer, etc)
+- Never write boilerplate JS yourself ever again
+
+</v-clicks>
+
+---
+transition: fade-out
+---
+
+# Start building apps <span class="text-orange-500 font-bold">at record speed</span>
+
+
+<div class="space-y-1">
+  <p class="text-white" v-click>Focus on what matters most.</p>
+  <p v-click class="font-bold">Building your product features,</p>
+  <p v-click>leveraging the full <span class="text-orange-500 font-bold">frontend native DX & UX,</span></p>
+  <p v-click>right there within the <span class="text-orange-500 font-bold">comfy & efficient</span> monolith 🚀</p>
+</div>
+
+<div v-click class="mt-32 text-2xl text-center">
+  Now, let's go and <span class="text-orange-500 font-bold">build something great</span> 🚀
+</div>
+
+---
+transition: fade-out
+---
+
+# About the speaker
 
 <div v-click>
-
-This shows up when you click the slide:
-
-```html
-<div v-click>This shows up when you click the slide.</div>
-```
-
+  I’ve been a programmer by trade for nearly 10 years, but above all <span class="font-bold text-orange-500">I’m a tech & product builder</span>
 </div>
 
-<br>
-
-<v-click>
-
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
-
-```html
-<span v-mark.underline.orange>inline markers</span>
-```
-
-</v-click>
-
-<div mt-20 v-click>
-
-[Learn more](https://sli.dev/guide/animations#click-animation)
-
+<div v-click>
+  As such, when I build new things, I always aim for <span class="font-bold text-orange-500">speed & efficiency</span>.
 </div>
 
----
-
-# Motions
-
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
-```
-
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
+<div v-click class="mt-4">
+  Because winning with a new thing on the market always depends on how fast and efficiently the team behind it can ship it to users.
 </div>
 
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
+<div v-click class="font-bold my-4">
+  I'm currently splitting my time between:
+</div>
 
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
+<v-clicks>
 
-[Learn more](https://sli.dev/guide/animations.html#motion)
+- Building <a href="https://www.stellaire.studio" target="_blank" class="text-orange-500 hover:text-orange-600!">stellaire.studio</a>, a startup studio specialized in building SaaS products
+- Working as a freelance Product Developer / Founding Engineer
 
+</v-clicks>
+
+<div v-click class="mt-4">
+  And btw, I’m currently on the lookout for a new part-time long-term freelancing mission 👋
+</div>
+
+<div v-click class="mt-8 text-center flex items-center justify-center gap-4">
+  <img src="./assets/nfilzi.jpg" class="size-8 rounded-full">
+
+  <a href="https://about.nfilzi.com" target="_blank" class="text-orange-500 hover:text-orange-600!">
+    about.nfilzi.com
+  </a>
 </div>
 
 ---
-
-# LaTeX
-
-LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
-
-<div h-3 />
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$ {1|3|all}
-\begin{aligned}
-\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
-\nabla \cdot \vec{B} &= 0 \\
-\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
-\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
-\end{aligned}
-$$
-
-[Learn more](https://sli.dev/features/latex)
-
+transition: fade-out
 ---
 
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
-
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
-
----
-foo: bar
-dragPos:
-  square: 691,32,167,_,-16
----
-
-# Draggable Elements
-
-Double-click on the draggable elements to edit their positions.
-
-<br>
-
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <div class="i-carbon:arrow-up" />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="663,206,261,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-
-###### Draggable Arrow
-
-```md
-<v-drag-arrow two-way />
-```
-
-<v-drag-arrow pos="67,452,253,46" two-way op70 />
-
----
-src: ./pages/imported-slides.md
-hide: false
----
-
----
-
-# Monaco Editor
-
-Slidev provides built-in Monaco Editor support.
-
-Add `{monaco}` to the code block to turn it into an editor:
-
-```ts {monaco}
-import { ref } from 'vue'
-import { emptyArray } from './external'
-
-const arr = ref(emptyArray(10))
-```
-
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
-
-```ts {monaco-run}
-import { version } from 'vue'
-import { emptyArray, sayHello } from './external'
-
-sayHello()
-console.log(`vue ${version}`)
-console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
-```
-
----
-layout: center
-class: text-center
----
-
-# Learn More
-
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
-
-<PoweredBySlidev mt-10 />
+# Questions?
