@@ -633,6 +633,30 @@ transition: fade-out
 transition: fade-out
 ---
 
+# Noteworthy resources
+
+## <span v-click class="font-bold">inertia</span>
+
+<v-clicks>
+
+- <a href="https://inertia-rails.dev/" target="_blank" class="text-orange-500 hover:text-orange-600!">Official docs - inertia-rails.dev</a>
+- <a href="https://avohq.io/blog/inertia-js-with-rails" target="_blank" class="text-orange-500 hover:text-orange-600!">Blog AvoHQ - Inertia.js with Rails</a>
+- <a href="https://evilmartians.com/chronicles/inertiajs-in-rails-a-new-era-of-effortless-integration" target="_blank" class="text-orange-500 hover:text-orange-600!">Blog Evil Martians - A new era of effortless integration</a>
+
+</v-clicks>
+
+## <span v-click class="font-bold">Other interesting avenues for JS frontend in rails</span>
+
+<v-clicks>
+
+- <a href="https://evilmartians.com/chronicles/the-art-of-turbo-mount-hotwire-meets-modern-js-frameworks" target="_blank" class="text-orange-500 hover:text-orange-600!">Blog Evil Martians - The art of turbo-mount/hotwire meets modern JS frameworks</a>
+
+</v-clicks>
+
+---
+transition: fade-out
+---
+
 # About the speaker
 
 <div v-click>
