@@ -397,7 +397,7 @@ transition: fade-out
   w/ react
 </div>
 
-```jsx {hide|all|1|2|4|7|8-29|12,27|13-17,26|18-25|all}{lines:true, maxHeight: '90%'}
+```jsx {hide|all|1|2|4|7|8-29|12,26|13-16,25|13-25|all}{lines:true, maxHeight: '90%'}
 // app/frontend/Pages/Startups/Index.jsx
 import { Head, Link } from '@inertiajs/react'
 
@@ -639,7 +639,8 @@ transition: fade-out
 
 <v-clicks>
 
-- <a href="https://inertia-rails.dev/" target="_blank" class="text-orange-500 hover:text-orange-600!">Official docs - inertia-rails.dev</a>
+- <a href="https://inertiajs.com/" target="_blank" class="text-orange-500 hover:text-orange-600!">Original tech - inertiajs.com</a>
+- <a href="https://inertia-rails.dev/" target="_blank" class="text-orange-500 hover:text-orange-600!">rails docs - inertia-rails.dev</a>
 - <a href="https://avohq.io/blog/inertia-js-with-rails" target="_blank" class="text-orange-500 hover:text-orange-600!">Blog AvoHQ - Inertia.js with Rails</a>
 - <a href="https://evilmartians.com/chronicles/inertiajs-in-rails-a-new-era-of-effortless-integration" target="_blank" class="text-orange-500 hover:text-orange-600!">Blog Evil Martians - A new era of effortless integration</a>
 
